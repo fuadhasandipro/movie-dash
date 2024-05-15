@@ -81,11 +81,11 @@ public class User {
         this.password = password;
     }
 
-    public String toStringUser() {
+    public static String toStringUser() {
         return userId + "," + role + "," + securityAns + "," + password + "\n";
     }
 
-    public User formUser(String str) {
+    public static User formUser(String str) {
         String[] info = str.split(",");
         User u = new User();
         u.setUserId(info[0]);
