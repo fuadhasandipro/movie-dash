@@ -91,7 +91,7 @@ public class MovieRepo implements IMovieRepo {
         int index = 0;
         for (String str : data) {
             if (str != null && !str.isEmpty()) {
-                Movie movie = Movie.formMovie(str);
+                Movie movie = new Movie().formMovie(str);
                 movies[index] = movie;
                 index++;
             }
