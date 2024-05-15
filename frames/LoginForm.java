@@ -23,7 +23,7 @@ public class LoginForm extends JFrame implements ActionListener {
         this.setSize(750, 480);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("movie.jpg"));
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("../assets/img/auth/movie.jpg"));
 
         mainPanel = new JPanel();
         welcomeLabel = new JLabel();
@@ -127,7 +127,7 @@ public class LoginForm extends JFrame implements ActionListener {
 		String command = ae.getActionCommand();
 
 		if (command.equals(createAccountButton.getText())) {
-			CreateAccountFrame createAccount = new CreateAccountFrame();
+			AdminView createAccount = new AdminView();
 			this.setVisible(false);
 			createAccount.setVisible(true);
             createAccount.repaint();

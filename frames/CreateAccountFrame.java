@@ -32,7 +32,7 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
         this.setSize(750, 480);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("movie2.jpg"));
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("../assets/img/auth/movie2.jpg"));
 
 		accountPanel = new JPanel();
 		welcomeLabel = new JLabel();
