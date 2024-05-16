@@ -76,7 +76,6 @@ public class BookingStepsDialog extends JDialog {
     private JPanel createStep2Panel() {
         JPanel panel = new JPanel();
 
-        // UI components for payment details
         numberOfTicketsField = new JTextField(10);
         panel.add(new JLabel("Number of Tickets:"));
         panel.add(numberOfTicketsField);
@@ -86,23 +85,19 @@ public class BookingStepsDialog extends JDialog {
             try {
                 numberOfTickets = Integer.parseInt(numberOfTicketsField.getText());
                 
-                // Calculate total price based on selected screening and number of tickets
                 double totalPrice = numberOfTickets * selectedScreening.getTicketPrice();
 
-                // Create a new Payment object
                 Payment payment = new Payment();
-                payment.setPaymentId(UUID.randomUUID().toString()); // Generate a unique payment ID
-                payment.setReservationId(selectedScreening.getScreeningId()); // Use screening ID as reservation ID for simplicity
+                payment.setPaymentId(UUID.randomUUID().toString()); 
+                payment.setReservationId(selectedScreening.getScreeningId());
                 payment.setAmount(totalPrice);
                 payment.setPaymentDate(LocalDate.now());
 
-                // Add payment to the PaymentRepo
                 PaymentRepo paymentRepo = new PaymentRepo();
                 paymentRepo.addPayment(payment);
 
-                // Switch to the next tab (index 2: Confirmation)
                 JTabbedPane tabbedPane = (JTabbedPane) SwingUtilities.getAncestorOfClass(JTabbedPane.class, panel);
-                tabbedPane.setSelectedIndex(2); // Switch to the next tab (Confirmation)
+                tabbedPane.setSelectedIndex(2);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid number of tickets.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -125,26 +120,22 @@ public class BookingStepsDialog extends JDialog {
             }
 
             try {
-                // Retrieve the number of tickets entered in step 2
                 int numberOfTickets = Integer.parseInt(numberOfTicketsField.getText());
 
-                // Create a reservation using the selected screening and input values
                 Reservation reservation = new Reservation();
                 reservation.setReservationId(UUID.randomUUID().toString());
                 reservation.setScreeningId(selectedScreening.getScreeningId());
-                reservation.setCustomerId("12345"); // Set the customer ID (replace with actual logic to fetch customer ID)
+                reservation.setCustomerId("12345");
                 reservation.setNumberOfTickets(numberOfTickets);
                 reservation.setTotalPrice(numberOfTickets * selectedScreening.getTicketPrice());
                 reservation.setReservationDate(LocalDate.now());
 
-                // Add the reservation to the repository
                 ReservationRepo reservationRepo = new ReservationRepo();
                 reservationRepo.addReservation(reservation);
 
                 // Show success message
                 JOptionPane.showMessageDialog(this, "Reservation confirmed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                // Close the dialog after reservation is confirmed
                 dispose();
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid number of tickets.", "Error", JOptionPane.ERROR_MESSAGE);
