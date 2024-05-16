@@ -79,7 +79,7 @@ public class UserRepo implements IUserRepo {
         String[] data = new String[MAX_USERS];
         for (int i = 0; i < userList.length; i++) {
             if (userList[i] != null) {
-                data[i] = userList[i].toString();
+                data[i] = userList[i].toStringReview();
             }
         }
 

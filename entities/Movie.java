@@ -78,7 +78,7 @@ public class Movie {
                directorId + "," + releaseDate + "," + duration + "," + posterImage + "\n";
     }
 
-    public Movie formMovie(String str) {
+    public static Movie formMovie(String str) {
         String[] parts = str.split(",");
         Movie movie = new Movie();
         movie.setMovieId(parts[0]);

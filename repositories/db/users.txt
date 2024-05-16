@@ -1,0 +1,1 @@
+12345,John Doe,johndoe@example.com,555-1234,123 Main St,2,blue,securepassword

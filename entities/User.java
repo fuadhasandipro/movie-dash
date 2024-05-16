@@ -81,17 +81,23 @@ public class User {
         this.password = password;
     }
 
-    public static String toStringUser() {
-        return userId + "," + role + "," + securityAns + "," + password + "\n";
+    public String toStringUser() {
+        return userId + "," + name + "," + email + "," + phoneNo + "," + address + "," + role + "," + securityAns + "," + password + "\n";
     }
+
 
     public static User formUser(String str) {
         String[] info = str.split(",");
-        User u = new User();
-        u.setUserId(info[0]);
-        u.setRole(Integer.parseInt(info[1]));
-        u.setSecurityAns(info[2]);
-        u.setPassword(info[3]);
-        return u;
+        return new User(
+            info[0],
+            info[1],
+            info[2],
+            info[3],
+            info[4],
+            Integer.parseInt(info[5]),
+            info[6],
+            info[7]
+        );
     }
+
 }

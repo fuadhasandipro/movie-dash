@@ -4,7 +4,7 @@ public class Review {
     private String reviewId, movieId, customerId;
     private int rating;
 
-    public Review() {}
+    public Review() { }
 
     public String getReviewId() {
         return reviewId;
@@ -43,12 +43,15 @@ public class Review {
     }
 
     public Review formReview(String str) {
-        String[] parts = str.split(",");
         Review review = new Review();
-        review.setReviewId(parts[0]);
-        review.setMovieId(parts[1]);
-        review.setCustomerId(parts[2]);
-        review.setRating(Integer.parseInt(parts[3]));
+            String[] parts = str.split(",");
+
+            review.setReviewId(parts[0].trim());
+            review.setMovieId(parts[1].trim());
+            review.setCustomerId(parts[2].trim());
+            review.setRating(Integer.parseInt(parts[3].trim()));
+
         return review;
     }
+
 }

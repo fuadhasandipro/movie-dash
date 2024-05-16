@@ -79,7 +79,6 @@ public class MoviesPanel extends  JPanel  {
 
 		add(movieTableSP);
 
-        
         JButton addButton = createButton("add.png", "Add");
         addButton.setBounds(30, 440, 80, 80); 
         add(addButton);

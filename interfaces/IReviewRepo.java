@@ -6,7 +6,8 @@ public interface IReviewRepo {
     void removeReview(String reviewId);
     void updateReview(Review review);
     Review searchReviewById(String reviewId);
-    Review searchReviewByCustomerId(String customerId);
+    Review[] searchReviewByCustomerId(String customerId);
     Review[] getReviewsByMovieId(String movieId);
+    Review hasUserReviewedMovie(String movieId, String customerId);
     Review[] getAllReviews();
 }

@@ -127,7 +127,7 @@ public class LoginForm extends JFrame implements ActionListener {
 		String command = ae.getActionCommand();
 
 		if (command.equals(createAccountButton.getText())) {
-			AdminView createAccount = new AdminView();
+			CreateAccountFrame createAccount = new CreateAccountFrame();
 			this.setVisible(false);
 			createAccount.setVisible(true);
             createAccount.repaint();
