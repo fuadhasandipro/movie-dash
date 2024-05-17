@@ -58,6 +58,30 @@ public class UserRepo implements IUserRepo {
         return null;
     }
 
+    public User searchUserByEmail(String email) {
+        User[] userList = getAllUsers();
+
+        for (User user : userList) {
+            if (user != null && user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+
+        return null;
+    }
+
+    public User searchUserByPhone(String phone) {
+        User[] userList = getAllUsers();
+
+        for (User user : userList) {
+            if (user != null && user.getPhoneNo().equals(phone)) {
+                return user;
+            }
+        }
+
+        return null;
+    }
+
     public User[] getAllUsers() {
         FileIO fileIO = new FileIO();
         String[] data = fileIO.readFile(USERS_FILE_PATH);
@@ -79,7 +103,7 @@ public class UserRepo implements IUserRepo {
         String[] data = new String[MAX_USERS];
         for (int i = 0; i < userList.length; i++) {
             if (userList[i] != null) {
-                data[i] = userList[i].toStringReview();
+                data[i] = userList[i].toStringUser();
             }
         }
 

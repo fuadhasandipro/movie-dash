@@ -3,6 +3,8 @@ package frames;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import repositories.*;
+import entities.*;
 
 public class CreateAccountFrame extends JFrame implements ActionListener {
 
@@ -106,6 +108,7 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
         registerButton.setBackground(new Color(0xf2213d));
         registerButton.setForeground(Color.white);
         registerButton.setFont(new Font("Rubik Light", Font.BOLD, 12));
+        registerButton.addActionListener(this);
         accountPanel.add(registerButton);
         registerButton.setBounds(45, 390, 125, 30);
 
@@ -191,6 +194,62 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent ae) {
 		String command = ae.getActionCommand();
+
+		if (command.equals(registerButton.getText())) {
+            String userId = userIdField.getText().trim();
+            String email = emailField.getText().trim();
+            String name = nameField.getText().trim();
+            String phone = phoneField.getText().trim();
+            String address = addressField.getText().trim();
+            String securityAns = securityField.getText().trim();
+            String password = new String(passwordField.getPassword()).trim();
+
+            if (validateInput(userId, email, name, phone, address, securityAns, password)) {
+
+                UserRepo userRepo = new UserRepo();
+
+                if (userRepo.searchUserByUserId(userId) != null) {
+                    JOptionPane.showMessageDialog(this, "User ID already exists.", "Registration Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (userRepo.searchUserByEmail(email) != null) {
+                    JOptionPane.showMessageDialog(this, "Email already exists.", "Registration Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (userRepo.searchUserByPhone(phone) != null) {
+                    JOptionPane.showMessageDialog(this, "Phone number already exists.", "Registration Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                User user = new User(userId, name, email, phone, address, 3, securityAns, password);
+
+                userRepo.addUser(user);
+                JOptionPane.showMessageDialog(this, "User registered successfully!");
+
+                CustomerView customerPanel = new CustomerView(user);
+                this.setVisible(false);
+                customerPanel.setVisible(true);
+                customerPanel.repaint();
+            }
+		}
 	}
+
+    private boolean validateInput(String userId, String email, String name, String phone, String address, String securityAns, String password) {
+        if (userId.isEmpty() || email.isEmpty() || name.isEmpty() || phone.isEmpty() || address.isEmpty() || securityAns.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All fields must be filled out.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            JOptionPane.showMessageDialog(this, "Invalid email format.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!phone.matches("^\\d{11}$")) {
+            JOptionPane.showMessageDialog(this, "Invalid phone number. It should be 11 digits.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
 	
 }

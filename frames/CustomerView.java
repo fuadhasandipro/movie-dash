@@ -22,11 +22,14 @@ public class CustomerView extends JFrame implements ActionListener {
 	private JLabel label1;
 	private JButton profileLink;
 	private JButton logoutButton;
+	private JButton reloadButton;
 	private JButton reviewsButton;
 	private JPanel rightPanelContainer;
     private CardLayout cardLayout;
     private CustomerMoviesPanel customerMoviesPanel;
     private CustomerReservationPanel customerReservationPanel;
+    private CustomerProfilePanel customerProfilePanel;
+    private CustomerRatingsPanel customerRatingsPanel;
 
     public CustomerView(User currentUser) {
         super("Customer Dashboard");
@@ -50,11 +53,14 @@ public class CustomerView extends JFrame implements ActionListener {
 		label1 = new JLabel();
 		profileLink = new JButton();
 		logoutButton = new JButton();
+		reloadButton = new JButton();
 		reviewsButton = new JButton();
         rightPanelContainer = new JPanel();
         cardLayout = new CardLayout();
         customerMoviesPanel = new CustomerMoviesPanel(this.currentUser, this);
-        customerReservationPanel = new CustomerReservationPanel(this.currentUser);
+        customerReservationPanel = new CustomerReservationPanel(this.currentUser, this);
+        customerProfilePanel = new CustomerProfilePanel(this.currentUser);
+        customerRatingsPanel = new CustomerRatingsPanel(this.currentUser);
         
         rightPanelContainer.setLayout(cardLayout);
 
@@ -122,8 +128,18 @@ public class CustomerView extends JFrame implements ActionListener {
         profileLink.setBackground(new Color(0x1c1b30));
         profileLink.setForeground(Color.white);
         profileLink.setFont(new Font("Verdana", Font.BOLD, 14));
+        profileLink.addActionListener(this);
         leftPanel.add(profileLink);
         profileLink.setBounds(15, 260, 150, 30);
+
+        //---- reloadbutton ----
+        reloadButton.setText("Reload Data");
+        reloadButton.setBackground(new Color(0x1c1b30));
+        reloadButton.setForeground(Color.white);
+        reloadButton.setFont(new Font("Verdana", Font.BOLD, 14));
+        reloadButton.addActionListener(this);
+        leftPanel.add(reloadButton);
+        reloadButton.setBounds(15, 295, 150, 30);
 
         //---- logoutButton ----
         logoutButton.setText("Logout");
@@ -131,7 +147,7 @@ public class CustomerView extends JFrame implements ActionListener {
         logoutButton.setForeground(Color.white);
         logoutButton.setFont(new Font("Verdana", Font.BOLD, 14));
         leftPanel.add(logoutButton);
-        logoutButton.setBounds(15, 295, 150, 30);
+        logoutButton.setBounds(15, 330, 150, 30);
 
         contentPane.add(leftPanel);
         leftPanel.setBounds(0, 0, 180, 570);
@@ -141,6 +157,8 @@ public class CustomerView extends JFrame implements ActionListener {
 
         rightPanelContainer.add(customerMoviesPanel, "movies");
         rightPanelContainer.add(customerReservationPanel, "reservations");
+        rightPanelContainer.add(customerProfilePanel, "profile");
+        rightPanelContainer.add(customerRatingsPanel, "reviews");
 
         cardLayout.show(rightPanelContainer, "movies");
 
@@ -158,6 +176,33 @@ public class CustomerView extends JFrame implements ActionListener {
                 break;
             case "Your Reservations":
                 cardLayout.show(rightPanelContainer, "reservations");
+                break;
+            case "    Profile":
+                cardLayout.show(rightPanelContainer, "profile");
+                break;
+            case "Your Reviews":
+                cardLayout.show(rightPanelContainer, "reviews");
+                break;
+
+            case "Reload Data":
+                customerMoviesPanel.setVisible(false);
+                customerReservationPanel.setVisible(false);
+
+                customerMoviesPanel = new CustomerMoviesPanel(this.currentUser, this);
+                customerReservationPanel = new CustomerReservationPanel(this.currentUser, this);
+                customerProfilePanel = new CustomerProfilePanel(this.currentUser);
+                customerRatingsPanel = new CustomerRatingsPanel(this.currentUser);
+
+                rightPanelContainer.removeAll();
+                rightPanelContainer.add(customerMoviesPanel, "movies");
+                rightPanelContainer.add(customerReservationPanel, "reservations");
+                rightPanelContainer.add(customerProfilePanel, "profile");
+                rightPanelContainer.add(customerRatingsPanel, "reviews");
+
+                cardLayout.show(rightPanelContainer, "movies");
+
+                rightPanelContainer.revalidate();
+                rightPanelContainer.repaint();
                 break;
         }
 	}

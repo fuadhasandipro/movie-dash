@@ -3,6 +3,8 @@ package frames;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import repositories.*;
+import entities.*;
 
 public class LoginForm extends JFrame implements ActionListener {
     private JPanel mainPanel;
@@ -11,7 +13,7 @@ public class LoginForm extends JFrame implements ActionListener {
     private JLabel userIdLabel;
     private JTextField userIdField;
     private JLabel passwordLabel;
-    private JTextField passwordField;
+    private JPasswordField passwordField;
     private JButton loginButton;
     private JLabel noAccountLabel;
     private JButton forgotPasswordButton;
@@ -31,7 +33,7 @@ public class LoginForm extends JFrame implements ActionListener {
         userIdLabel = new JLabel();
         userIdField = new JTextField();
         passwordLabel = new JLabel();
-        passwordField = new JTextField();
+        passwordField = new JPasswordField();
         loginButton = new JButton();
         noAccountLabel = new JLabel();
         forgotPasswordButton = new JButton();
@@ -109,6 +111,7 @@ public class LoginForm extends JFrame implements ActionListener {
         forgotPasswordButton.setForeground(Color.white);
         forgotPasswordButton.setFont(new Font("Rubik Light", Font.BOLD, 12));
         forgotPasswordButton.setBackground(new Color(0x201f2d));
+        forgotPasswordButton.addActionListener(this);
         mainPanel.add(forgotPasswordButton);
         forgotPasswordButton.setBounds(555, 310, 135, 20);
 
@@ -132,6 +135,71 @@ public class LoginForm extends JFrame implements ActionListener {
 			createAccount.setVisible(true);
             createAccount.repaint();
 		}
+
+        if (command.equals(loginButton.getText())) {
+            String userId = userIdField.getText().trim();
+            String password = new String(passwordField.getPassword()).trim();
+
+            if (userId.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "User ID and Password are required.", "Login Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            UserRepo userRepo = new UserRepo();
+            User user = userRepo.searchUserByUserId(userId);
+
+            if (user == null || !user.getPassword().equals(password)) {
+                JOptionPane.showMessageDialog(this, "Invalid User ID or Password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }else {
+                JOptionPane.showMessageDialog(this, "Login successful!");
+
+                CustomerView customerPanel = new CustomerView(user);
+                this.setVisible(false);
+                customerPanel.setVisible(true);
+                customerPanel.repaint();
+            }
+
+        }
+
+        if (command.equals(forgotPasswordButton.getText())) {
+            String userId = userIdField.getText().trim();
+
+            if (userId.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter your User ID to reset your password.", "Forgot Password", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            UserRepo userRepo = new UserRepo();
+            User user = userRepo.searchUserByUserId(userId);
+
+            if (user == null) {
+                JOptionPane.showMessageDialog(this, "User ID not found.", "Forgot Password", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String securityAns = JOptionPane.showInputDialog(this, "Security Key:", "Forgot Password", JOptionPane.PLAIN_MESSAGE);
+
+            if (securityAns == null) {
+                return;
+            }
+
+            if (!user.getSecurityAns().equals(securityAns)) {
+                JOptionPane.showMessageDialog(this, "Incorrect Security Key.", "Forgot Password", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String newPassword = JOptionPane.showInputDialog(this, "Enter your new password:", "Forgot Password", JOptionPane.PLAIN_MESSAGE);
+
+            if (newPassword == null) {
+                return;
+            }
+
+            user.setPassword(newPassword);
+            userRepo.updateUser(user);
+
+            JOptionPane.showMessageDialog(this, "Password reset successfully. Please login with your new password.", "Forgot Password", JOptionPane.INFORMATION_MESSAGE);
+        }
 	}
 	
 }

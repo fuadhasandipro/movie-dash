@@ -8,5 +8,7 @@ public interface IUserRepo {
 	void removeUser(String userId);
 	void updateUser(User user);
 	User searchUserByUserId(String userId);
-	User[] getAllUser();
+	User searchUserByEmail(String email);
+	User searchUserByPhone(String phone);
+	User[] getAllUsers();
 }

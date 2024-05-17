@@ -19,6 +19,7 @@ public class CustomerMoviesPanel extends JPanel {
     private JPanel buttonPanel;
     private JButton submitButton;
     private JButton reviewButton;
+    private JButton reserveButton;
     private ButtonGroup starGroup;
     private JDialog reviewDialog;
     private JPanel card;
@@ -26,58 +27,65 @@ public class CustomerMoviesPanel extends JPanel {
 
     public CustomerMoviesPanel(User currentUser, JFrame parentFrame) {
 
-		searchField = new JTextField();
-		headerTitle = new JLabel();
-		searchLabel = new JLabel();
-		searchButton = new JButton();
         this.currentUser = currentUser;
         this.parentFrame = parentFrame;
+
+        searchField = new JTextField();
+        headerTitle = new JLabel();
+        searchLabel = new JLabel();
+        searchButton = new JButton();
+        reserveButton = new JButton("Reserve Screening");
 
         setBackground(new Color(0x201f2d));
         setLayout(null);
 
-        //---- searchField ----
         searchField.setForeground(Color.white);
         searchField.setBackground(new Color(0x3a3854));
         add(searchField);
         searchField.setBounds(260, 45, 405, 25);
 
-        //---- headerTitle ----
         headerTitle.setText("Listed Movies for " + currentUser.getName());
         headerTitle.setForeground(new Color(0xb8b3fc));
         headerTitle.setFont(new Font("Verdana", Font.PLAIN, 16));
         add(headerTitle);
-			headerTitle.setBounds(30, 40, 230, headerTitle.getPreferredSize().height);
+        headerTitle.setBounds(30, 40, 230, headerTitle.getPreferredSize().height);
 
-        //---- searchLabel ----
         searchLabel.setText("Enter Movie to Search");
         searchLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
         searchLabel.setForeground(Color.white);
         add(searchLabel);
         searchLabel.setBounds(new Rectangle(new Point(260, 25), searchLabel.getPreferredSize()));
 
-        //---- searchButton ----
         ImageIcon searchIcon = new ImageIcon(getClass().getResource("../assets/img/dashboard/searchicon.png"));
         searchButton.setIcon(searchIcon);
         add(searchButton);
         searchButton.setBounds(670, 45, 30, 25);
 
         MovieRepo movieRepo = new MovieRepo();
-        moviePanel = new JPanel(new GridLayout(0, 3, 10, 10)); 
+        moviePanel = new JPanel(new GridLayout(0, 3, 10, 10));
 
         Movie[] movies = movieRepo.getAllMovies();
 
         for (Movie movie : movies) {
-            if(movie != null) {
+            if (movie != null) {
                 JPanel card = createMovieCard(movie);
                 moviePanel.add(card);
             }
         }
 
         JScrollPane scrollPane = new JScrollPane(moviePanel);
-
         add(scrollPane);
         scrollPane.setBounds(30, 105, 660, 425);
+
+        add(reserveButton);
+        reserveButton.setBounds(30, 70, 150, 25);
+        reserveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BookingStepsDialog bookingDialog = new BookingStepsDialog(parentFrame);
+                bookingDialog.setVisible(true);
+            }
+        });
     }
 
     private JPanel createMovieCard(Movie movie) {
@@ -137,17 +145,6 @@ public class CustomerMoviesPanel extends JPanel {
 
 
         card.add(Box.createVerticalStrut(10));
-
-        JButton reserveButton = new JButton("Reserve Screening");
-        reserveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        reserveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                BookingStepsDialog bookingDialog = new BookingStepsDialog(parentFrame);
-                bookingDialog.setVisible(true);
-            }
-        });
-        card.add(reserveButton);
 
         return card;
     }
