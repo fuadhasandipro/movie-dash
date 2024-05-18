@@ -30,6 +30,7 @@ public class CustomerView extends JFrame implements ActionListener {
     private CustomerReservationPanel customerReservationPanel;
     private CustomerProfilePanel customerProfilePanel;
     private CustomerRatingsPanel customerRatingsPanel;
+    private CustomerPaymentsPanel customerPaymentsPanel;
 
     public CustomerView(User currentUser) {
         super("Customer Dashboard");
@@ -61,6 +62,7 @@ public class CustomerView extends JFrame implements ActionListener {
         customerReservationPanel = new CustomerReservationPanel(this.currentUser, this);
         customerProfilePanel = new CustomerProfilePanel(this.currentUser);
         customerRatingsPanel = new CustomerRatingsPanel(this.currentUser);
+        customerPaymentsPanel = new CustomerPaymentsPanel(this.currentUser);
         
         rightPanelContainer.setLayout(cardLayout);
 
@@ -159,6 +161,7 @@ public class CustomerView extends JFrame implements ActionListener {
         rightPanelContainer.add(customerReservationPanel, "reservations");
         rightPanelContainer.add(customerProfilePanel, "profile");
         rightPanelContainer.add(customerRatingsPanel, "reviews");
+        rightPanelContainer.add(customerPaymentsPanel, "payments");
 
         cardLayout.show(rightPanelContainer, "movies");
 
@@ -183,6 +186,10 @@ public class CustomerView extends JFrame implements ActionListener {
             case "Your Reviews":
                 cardLayout.show(rightPanelContainer, "reviews");
                 break;
+                
+            case "Your Payments":
+                cardLayout.show(rightPanelContainer, "payments");
+                break;
 
             case "Reload Data":
                 customerMoviesPanel.setVisible(false);
@@ -203,6 +210,11 @@ public class CustomerView extends JFrame implements ActionListener {
 
                 rightPanelContainer.revalidate();
                 rightPanelContainer.repaint();
+                break;
+            case "Logout": 
+                this.setVisible(false);
+                LoginForm lf = new LoginForm();
+		        lf.setVisible(true);
                 break;
         }
 	}

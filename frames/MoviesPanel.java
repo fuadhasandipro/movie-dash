@@ -14,7 +14,6 @@ import java.time.format.DateTimeParseException;
 import java.util.UUID;
 import javax.imageio.ImageIO;
 
-
 import entities.*;
 import repositories.*;
 
@@ -22,15 +21,14 @@ public class MoviesPanel extends JPanel implements ActionListener {
 
     private static final String POSTERS_DIRECTORY = "assets/img/posters/";
 
-
     private JTextField searchField;
     private JLabel headerTitle;
     private JLabel searchLabel;
     private JButton searchButton;
     private JTable movieTable;
     private JScrollPane movieTableSP;
-
-    // Movie fields
+    private JLabel movieIdLabel;
+    private JTextField movieIdField;
     private JLabel genreIdLabel;
     private JTextField genreIdField;
     private JLabel titleLabel;
@@ -46,15 +44,17 @@ public class MoviesPanel extends JPanel implements ActionListener {
     private File posterImageFile;
     private JButton addButton;
     private MovieRepo movieRepo;
-    private JButton fillFormButton; 
-    private JButton updateButton; 
+    private JButton fillFormButton;
+    private JButton updateButton;
+    private GenreRepo genreRepo;
 
     public MoviesPanel() {
+        genreRepo = new GenreRepo();
         movieRepo = new MovieRepo();
         setBackground(new Color(0x201f2d));
         setLayout(null);
 
-        // Header components
+        // Move search and movie label to the top
         headerTitle = new JLabel("Movies");
         headerTitle.setForeground(new Color(0xb8b3fc));
         headerTitle.setFont(new Font("Verdana", Font.BOLD, 24));
@@ -78,14 +78,14 @@ public class MoviesPanel extends JPanel implements ActionListener {
         searchButton.setBounds(670, 10, 30, 25);
         add(searchButton);
 
-        // Movie fields
-        titleLabel = createLabel("Title");
-        titleLabel.setBounds(30, 70, 60, 25);
-        add(titleLabel);
+        // Movie fields setup
+        movieIdLabel = createLabel("Movie ID");
+        movieIdLabel.setBounds(30, 70, 60, 25);
+        add(movieIdLabel);
 
-        titleField = createTextField();
-        titleField.setBounds(100, 70, 120, 25);
-        add(titleField);
+        movieIdField = createTextField();
+        movieIdField.setBounds(100, 70, 120, 25);
+        add(movieIdField);
 
         genreIdLabel = createLabel("Genre ID");
         genreIdLabel.setBounds(240, 70, 60, 25);
@@ -95,13 +95,13 @@ public class MoviesPanel extends JPanel implements ActionListener {
         genreIdField.setBounds(310, 70, 120, 25);
         add(genreIdField);
 
-        releaseDateLabel = createLabel("Release Date");
-        releaseDateLabel.setBounds(450, 70, 100, 25); // Adjusted bounds
-        add(releaseDateLabel);
+        titleLabel = createLabel("Title");
+        titleLabel.setBounds(450, 70, 60, 25);
+        add(titleLabel);
 
-        releaseDateField = createTextField();
-        releaseDateField.setBounds(560, 70, 120, 25); // Adjusted bounds
-        add(releaseDateField);
+        titleField = createTextField();
+        titleField.setBounds(520, 70, 120, 25);
+        add(titleField);
 
         descriptionLabel = createLabel("Description");
         descriptionLabel.setBounds(30, 105, 80, 25);
@@ -111,35 +111,43 @@ public class MoviesPanel extends JPanel implements ActionListener {
         descriptionField.setBounds(120, 105, 520, 25);
         add(descriptionField);
 
+        releaseDateLabel = createLabel("Release");
+        releaseDateLabel.setBounds(30, 140, 80, 25);
+        add(releaseDateLabel);
+
+        releaseDateField = createTextField();
+        releaseDateField.setBounds(120, 140, 120, 25);
+        add(releaseDateField);
+
         durationLabel = createLabel("Duration (min)");
-        durationLabel.setBounds(30, 140, 100, 25);
+        durationLabel.setBounds(260, 140, 100, 25);
         add(durationLabel);
 
         durationField = createTextField();
-        durationField.setBounds(140, 140, 120, 25);
+        durationField.setBounds(370, 140, 120, 25);
         add(durationField);
 
-        posterImageLabel = createLabel("Poster Image");
-        posterImageLabel.setBounds(280, 140, 110, 25);
+        posterImageLabel = createLabel("Poster");
+        posterImageLabel.setBounds(510, 140, 80, 25);
         add(posterImageLabel);
 
         uploadButton = new JButton("Upload");
-        uploadButton.setBounds(390, 140, 80, 25);
+        uploadButton.setBounds(600, 140, 80, 25);
         uploadButton.addActionListener(e -> uploadImage());
         add(uploadButton);
 
         addButton = new JButton("Add Movie");
-        addButton.setBounds(30, 180, 100, 25);
+        addButton.setBounds(30, 175, 100, 25); 
         addButton.addActionListener(this);
         add(addButton);
 
         fillFormButton = new JButton("Fill Form");
-        fillFormButton.setBounds(140, 180, 120, 25);
+        fillFormButton.setBounds(140, 175, 120, 25);
         fillFormButton.addActionListener(this);
         add(fillFormButton);
 
         updateButton = new JButton("Update");
-        updateButton.setBounds(270, 180, 120, 25);
+        updateButton.setBounds(270, 175, 120, 25);
         updateButton.addActionListener(this);
         add(updateButton);
 
@@ -147,19 +155,13 @@ public class MoviesPanel extends JPanel implements ActionListener {
         Movie[] movies = movieRepo.getAllMovies();
         String[][] movieData = new String[movies.length][7];
 
-        GenreRepo genreRepo = new GenreRepo();
+
 
         for (int i = 0; i < movies.length; i++) {
             if (movies[i] != null) {
                 movieData[i][0] = movies[i].getMovieId();
                 
-                Genre genre = genreRepo.searchGenreById(movies[i].getGenreId());
-                if (genre != null) {
-                    movieData[i][1] = genre.getGenreName();
-                } else {
-                    movieData[i][1] = movies[i].getGenreId();
-                }
-                
+                movieData[i][1] = movies[i].getGenreId();
                 movieData[i][2] = movies[i].getTitle();
                 movieData[i][3] = movies[i].getDescription();
                 movieData[i][4] = movies[i].getReleaseDate().toString();
@@ -204,7 +206,7 @@ public class MoviesPanel extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addButton) {
-            String movieId = UUID.randomUUID().toString();
+            String movieId = movieIdField.getText().trim();
             String genreId = genreIdField.getText().trim();
             String title = titleField.getText().trim();
             String description = descriptionField.getText().trim();
@@ -213,6 +215,16 @@ public class MoviesPanel extends JPanel implements ActionListener {
 
             LocalDate releaseDate;
             int duration;
+
+            if (movieRepo.searchMovieByMovieId(movieId) != null) {
+                JOptionPane.showMessageDialog(this, "Movie ID already exists.", "Adding Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (genreRepo.searchGenreById(genreId) == null) {
+                JOptionPane.showMessageDialog(this, "Genre doesn't exists.", "Adding Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             try {
                 releaseDate = LocalDate.parse(releaseDateStr);
@@ -234,7 +246,6 @@ public class MoviesPanel extends JPanel implements ActionListener {
             }
 
             String originalPosterImageName = posterImageFile.getName();
-            String uniquePosterImageName = getUniqueFileName(originalPosterImageName);
 
             Movie movie = new Movie();
             movie.setMovieId(movieId);
@@ -243,11 +254,12 @@ public class MoviesPanel extends JPanel implements ActionListener {
             movie.setDescription(description);
             movie.setReleaseDate(releaseDate);
             movie.setDuration(duration);
-            movie.setPosterImage(uniquePosterImageName);
+            movie.setPosterImage(originalPosterImageName);
 
             movieRepo.addMovie(movie);
             JOptionPane.showMessageDialog(this, "Movie added successfully!");
 
+            movieIdField.setText("");
             genreIdField.setText("");
             titleField.setText("");
             descriptionField.setText("");
@@ -289,6 +301,11 @@ public class MoviesPanel extends JPanel implements ActionListener {
                 LocalDate releaseDate;
                 int duration;
 
+            if (genreRepo.searchGenreById(genreId) == null) {
+                JOptionPane.showMessageDialog(this, "Genre doesn't exists.", "Update Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
                 try {
                     releaseDate = LocalDate.parse(releaseDateStr);
                 } catch (DateTimeParseException ex) {
@@ -304,13 +321,11 @@ public class MoviesPanel extends JPanel implements ActionListener {
                 }
 
                 String originalPosterImageName = "";
-                String uniquePosterImageName = "";
 
                 if (posterImageFile != null) {
                     originalPosterImageName = posterImageFile.getName();
-                    uniquePosterImageName = getUniqueFileName(originalPosterImageName);
-                }else {
-                    uniquePosterImageName = exPosterImage;
+                } else {
+                    originalPosterImageName = exPosterImage;
                 }
 
                 Movie movie = new Movie();
@@ -321,11 +336,12 @@ public class MoviesPanel extends JPanel implements ActionListener {
                 movie.setReleaseDate(releaseDate);
                 movie.setDuration(duration);
                 
-                movie.setPosterImage(uniquePosterImageName);
+                movie.setPosterImage(originalPosterImageName);
 
                 movieRepo.updateMovie(movie);
                 JOptionPane.showMessageDialog(this, "Movie updated successfully!");
 
+                movieIdField.setText("");
                 genreIdField.setText("");
                 titleField.setText("");
                 descriptionField.setText("");
@@ -339,27 +355,7 @@ public class MoviesPanel extends JPanel implements ActionListener {
             }
         }
     }
-    
-    private String getUniqueFileName(String fileName) {
-        File file = new File(POSTERS_DIRECTORY + fileName);
-        if (!file.exists()) {
-            return fileName;
-        }
 
-        int dotIndex = fileName.lastIndexOf('.');
-        String baseName = (dotIndex == -1) ? fileName : fileName.substring(0, dotIndex);
-        String extension = (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);
-
-        int count = 1;
-        while (true) {
-            String newName = baseName + "_" + count + (extension.isEmpty() ? "" : "." + extension);
-            file = new File(POSTERS_DIRECTORY + newName);
-            if (!file.exists()) {
-                return newName;
-            }
-            count++;
-        }
-    }
 
     private void uploadImage() {
         JFileChooser fileChooser = new JFileChooser();
@@ -379,8 +375,7 @@ public class MoviesPanel extends JPanel implements ActionListener {
                     Files.createDirectories(Paths.get(outputDir));
                 }
 
-                String uniqueFileName = getUniqueFileName(posterImageFile.getName());
-                File outputfile = new File(outputDir + uniqueFileName);
+                File outputfile = new File(outputDir + posterImageFile.getName());
                 ImageIO.write(resizedImage, "jpg", outputfile);
                 JOptionPane.showMessageDialog(this, "Image uploaded successfully.");
             } catch (IOException ex) {
@@ -399,13 +394,7 @@ public class MoviesPanel extends JPanel implements ActionListener {
             if (movies[i] != null) {
                 movieData[i][0] = movies[i].getMovieId();
                 
-                Genre genre = genreRepo.searchGenreById(movies[i].getGenreId());
-                if (genre != null) {
-                    movieData[i][1] = genre.getGenreName();
-                } else {
-                    movieData[i][1] = movies[i].getGenreId();
-                }
-                
+                movieData[i][1] = movies[i].getGenreId();
                 movieData[i][2] = movies[i].getTitle();
                 movieData[i][3] = movies[i].getDescription();
                 movieData[i][4] = movies[i].getReleaseDate().toString();

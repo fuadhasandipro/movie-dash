@@ -9,7 +9,7 @@ public class Start {
             "1", "John Doe", "john.doe@example.com", "1234567890", "123 Main St", 1, "My first pet", "password123"
         );
 
-		AdminView lf = new AdminView(testUser);
+		LoginForm lf = new LoginForm();
 		lf.setVisible(true);
 	}
 }

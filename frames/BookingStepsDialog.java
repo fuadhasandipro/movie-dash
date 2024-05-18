@@ -5,15 +5,19 @@ import entities.*;
 import repositories.*;
 import java.time.LocalDate;
 import java.util.UUID;
+import java.awt.event.*;
 
-public class BookingStepsDialog extends JDialog {
+public class BookingStepsDialog extends JDialog{
 
     private Screening selectedScreening;
     private int numberOfTickets;
-    JTextField numberOfTicketsField;
+    private JTextField numberOfTicketsField;
+    private JTabbedPane tabbedPane;
+    private User currentUser;
 
-    public BookingStepsDialog(JFrame parentFrame) {
+    public BookingStepsDialog(JFrame parentFrame, User currentUser) {
         super(parentFrame, "Book a Seat", true);
+        this.currentUser = currentUser;
         setSize(400, 300);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
@@ -21,7 +25,7 @@ public class BookingStepsDialog extends JDialog {
         JPanel step2Panel = createStep2Panel();
         JPanel step3Panel = createStep3Panel();
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Step 1: Choose Screening", step1Panel);
         tabbedPane.addTab("Step 2: Make Payment", step2Panel);
         tabbedPane.addTab("Step 3: Confirm Reservation", step3Panel);
@@ -49,6 +53,7 @@ public class BookingStepsDialog extends JDialog {
         panel.add(screeningComboBox);
 
         JButton nextButton = new JButton("Next");
+
         nextButton.addActionListener(e -> {
             String selectedScreeningDisplay = (String) screeningComboBox.getSelectedItem();
 
@@ -62,7 +67,6 @@ public class BookingStepsDialog extends JDialog {
 
             if (selectedScreening != null) {
                 this.selectedScreening = selectedScreening;
-                JTabbedPane tabbedPane = (JTabbedPane) SwingUtilities.getAncestorOfClass(JTabbedPane.class, panel);
                 tabbedPane.setSelectedIndex(1);
             } else {
                 JOptionPane.showMessageDialog(this, "Please select a valid screening.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -96,7 +100,6 @@ public class BookingStepsDialog extends JDialog {
                 PaymentRepo paymentRepo = new PaymentRepo();
                 paymentRepo.addPayment(payment);
 
-                JTabbedPane tabbedPane = (JTabbedPane) SwingUtilities.getAncestorOfClass(JTabbedPane.class, panel);
                 tabbedPane.setSelectedIndex(2);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid number of tickets.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -125,7 +128,7 @@ public class BookingStepsDialog extends JDialog {
                 Reservation reservation = new Reservation();
                 reservation.setReservationId(UUID.randomUUID().toString());
                 reservation.setScreeningId(selectedScreening.getScreeningId());
-                reservation.setCustomerId("12345");
+                reservation.setCustomerId(this.currentUser.getUserId());
                 reservation.setNumberOfTickets(numberOfTickets);
                 reservation.setTotalPrice(numberOfTickets * selectedScreening.getTicketPrice());
                 reservation.setReservationDate(LocalDate.now());
@@ -133,7 +136,6 @@ public class BookingStepsDialog extends JDialog {
                 ReservationRepo reservationRepo = new ReservationRepo();
                 reservationRepo.addReservation(reservation);
 
-                // Show success message
                 JOptionPane.showMessageDialog(this, "Reservation confirmed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
                 dispose();
@@ -145,5 +147,6 @@ public class BookingStepsDialog extends JDialog {
 
         return panel;
     }
+
 
 }

@@ -41,7 +41,7 @@ public class CustomerReservationPanel extends JPanel {
         bookButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BookingStepsDialog bookingDialog = new BookingStepsDialog(parentFrame);
+                BookingStepsDialog bookingDialog = new BookingStepsDialog(parentFrame, currentUser);
                 bookingDialog.setVisible(true);
             }
         });

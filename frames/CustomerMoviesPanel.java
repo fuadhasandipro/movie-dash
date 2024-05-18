@@ -44,7 +44,7 @@ public class CustomerMoviesPanel extends JPanel {
         add(searchField);
         searchField.setBounds(260, 45, 405, 25);
 
-        headerTitle.setText("Listed Movies for " + currentUser.getName());
+        headerTitle.setText("For " + currentUser.getName());
         headerTitle.setForeground(new Color(0xb8b3fc));
         headerTitle.setFont(new Font("Verdana", Font.PLAIN, 16));
         add(headerTitle);
@@ -82,7 +82,7 @@ public class CustomerMoviesPanel extends JPanel {
         reserveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BookingStepsDialog bookingDialog = new BookingStepsDialog(parentFrame);
+                BookingStepsDialog bookingDialog = new BookingStepsDialog(parentFrame, currentUser);
                 bookingDialog.setVisible(true);
             }
         });

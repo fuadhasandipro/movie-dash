@@ -154,10 +154,22 @@ public class LoginForm extends JFrame implements ActionListener {
             }else {
                 JOptionPane.showMessageDialog(this, "Login successful!");
 
-                CustomerView customerPanel = new CustomerView(user);
-                this.setVisible(false);
-                customerPanel.setVisible(true);
-                customerPanel.repaint();
+                if(user.getRole() == 1) {
+                    AdminView adminPanel = new AdminView(user);
+                    this.setVisible(false);
+                    adminPanel.setVisible(true);
+                    adminPanel.repaint();
+                } else if(user.getRole() == 2) {
+                    StaffView staffPanel = new StaffView(user);
+                    this.setVisible(false);
+                    staffPanel.setVisible(true);
+                    staffPanel.repaint();
+                } else if(user.getRole() == 3) {
+                    CustomerView customerPanel = new CustomerView(user);
+                    this.setVisible(false);
+                    customerPanel.setVisible(true);
+                    customerPanel.repaint();
+                }
             }
 
         }

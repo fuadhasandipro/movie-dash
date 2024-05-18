@@ -79,7 +79,7 @@ public class GenreRepo implements IGenreRepo {
         String[] data = new String[MAX_AMOUNT];
         for (int i = 0; i < genreList.length; i++) {
             if (genreList[i] != null) {
-                data[i] = genreList[i].toString();
+                data[i] = genreList[i].toStringGenre();
             }
         }
 
