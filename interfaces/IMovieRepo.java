@@ -7,6 +7,5 @@ public interface IMovieRepo {
 	void updateMovie(Movie movie);
     Movie searchMovieByMovieId(String movieId);
     Movie[] searchMovieByGenreId(String genreId);
-    Movie[] searchMovieByDirectorId(String directorId);
     Movie[] getAllMovies();
 }

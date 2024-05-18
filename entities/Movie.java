@@ -2,7 +2,7 @@ package entities;
 import java.time.LocalDate;
 
 public class Movie {
-    private String movieId, genreId, directorId, title, description;
+    private String movieId, genreId, title, description;
     private LocalDate releaseDate;
     private int duration;
     private String posterImage;
@@ -41,14 +41,6 @@ public class Movie {
         this.genreId = genreId;
     }
 
-    public String getDirectorId() {
-        return directorId;
-    }
-
-    public void setDirectorId(String directorId) {
-        this.directorId = directorId;
-    }
-
     public LocalDate getReleaseDate() {
         return releaseDate;
     }
@@ -74,8 +66,7 @@ public class Movie {
     }
 
     public String toStringMovie() {
-        return movieId + "," + title + "," + description + "," + genreId + "," +
-               directorId + "," + releaseDate + "," + duration + "," + posterImage + "\n";
+        return movieId + "," + title + "," + description + "," + genreId + "," + releaseDate + "," + duration + "," + posterImage + "\n";
     }
 
     public static Movie formMovie(String str) {
@@ -85,10 +76,9 @@ public class Movie {
         movie.setTitle(parts[1]);
         movie.setDescription(parts[2]);
         movie.setGenreId(parts[3]);
-        movie.setDirectorId(parts[4]);
-        movie.setReleaseDate(LocalDate.parse(parts[5]));
-        movie.setDuration(Integer.parseInt(parts[6]));
-        movie.setPosterImage(parts[7]);
+        movie.setReleaseDate(LocalDate.parse(parts[4]));
+        movie.setDuration(Integer.parseInt(parts[5]));
+        movie.setPosterImage(parts[6]);
         return movie;
     }
 }

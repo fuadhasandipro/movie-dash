@@ -72,19 +72,6 @@ public class MovieRepo implements IMovieRepo {
         return result;
     }
 
-    public Movie[] searchMovieByDirectorId(String directorId) {
-        Movie[] movies = getAllMovies();
-        Movie[] result = new Movie[MAX_MOVIES];
-        int index = 0;
-        for (Movie movie : movies) {
-            if (movie != null && movie.getDirectorId().equals(directorId)) {
-                result[index] = movie;
-                index++;
-            }
-        }
-        return result;
-    }
-
     public Movie[] getAllMovies() {
         String[] data = new FileIO().readFile(MOVIES_FILE_PATH);
         Movie[] movies = new Movie[MAX_MOVIES];
@@ -103,7 +90,7 @@ public class MovieRepo implements IMovieRepo {
         String[] data = new String[MAX_MOVIES];
         for (int i = 0; i < movies.length; i++) {
             if (movies[i] != null) {
-                data[i] = movies[i].toString();
+                data[i] = movies[i].toStringMovie();
             }
         }
         new FileIO().writeFile(data, MOVIES_FILE_PATH);

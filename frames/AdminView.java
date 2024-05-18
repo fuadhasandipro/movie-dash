@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import entities.*;
+
 public class AdminView extends JFrame implements ActionListener {
     
     private JPanel leftPanel;
@@ -11,13 +13,10 @@ public class AdminView extends JFrame implements ActionListener {
 	private JButton dashboardButton;
 	private JButton moviesButton;
 	private JButton genresButton;
-	private JButton actorsButton;
-	private JButton directorsButton;
 	private JButton screensButton;
 	private JButton reservationButton;
 	private JButton paymentsButton;
 	private JButton usersButton;
-	private JLabel label1;
 	private JButton profileLink;
 	private JButton logoutButton;
 	private JButton reviewsButton;
@@ -25,10 +24,18 @@ public class AdminView extends JFrame implements ActionListener {
     private CardLayout cardLayout;
     private AdminDashboard adminDashboardPanel;
     private MoviesPanel adminMoviePanel;
+    private GenresPanel adminGenrePanel;
+    private ScreeningPanel adminScreeningPanel;
+    private ReservationPanel adminReservationPanel;
+    private PaymentPanel adminPaymentPanel;
+    private ReviewPanel adminReviewPanel;
+    private UserListPanel adminUserListPanel;
+    private CustomerProfilePanel adminProfilePanel;
+    private User currentUser;
 
-
-    public AdminView() {
+    public AdminView(User currentUser) {
         super("Admin Dashboard");
+        this.currentUser = currentUser;
 
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
@@ -38,13 +45,10 @@ public class AdminView extends JFrame implements ActionListener {
 		dashboardButton = new JButton();
 		moviesButton = new JButton();
 		genresButton = new JButton();
-		actorsButton = new JButton();
-		directorsButton = new JButton();
 		screensButton = new JButton();
 		reservationButton = new JButton();
 		paymentsButton = new JButton();
 		usersButton = new JButton();
-		label1 = new JLabel();
 		profileLink = new JButton();
 		logoutButton = new JButton();
 		reviewsButton = new JButton();
@@ -52,6 +56,13 @@ public class AdminView extends JFrame implements ActionListener {
         cardLayout = new CardLayout();
         adminDashboardPanel = new AdminDashboard();
         adminMoviePanel = new MoviesPanel();
+        adminGenrePanel = new GenresPanel();
+        adminScreeningPanel = new ScreeningPanel();
+        adminReservationPanel = new ReservationPanel();
+        adminPaymentPanel = new PaymentPanel();
+        adminReviewPanel = new ReviewPanel();
+        adminUserListPanel = new UserListPanel();
+        adminProfilePanel = new CustomerProfilePanel(this.currentUser);
         
         rightPanelContainer.setLayout(cardLayout);
 
@@ -98,24 +109,6 @@ public class AdminView extends JFrame implements ActionListener {
         leftPanel.add(genresButton);
         genresButton.setBounds(15, 190, 150, 30);
 
-        //---- actorsButton ----
-        actorsButton.setText("Actors");
-        actorsButton.setBackground(new Color(0x1c1b30));
-        actorsButton.setForeground(Color.white);
-        actorsButton.setFont(new Font("Verdana", Font.BOLD, 14));
-        actorsButton.addActionListener(this);
-        leftPanel.add(actorsButton);
-        actorsButton.setBounds(15, 225, 150, 30);
-
-        //---- directorsButton ----
-        directorsButton.setText("Directors");
-        directorsButton.setBackground(new Color(0x1c1b30));
-        directorsButton.setForeground(Color.white);
-        directorsButton.setFont(new Font("Verdana", Font.BOLD, 14));
-        directorsButton.addActionListener(this);
-        leftPanel.add(directorsButton);
-        directorsButton.setBounds(15, 260, 150, 30);
-
         //---- screensButton ----
         screensButton.setText("Screens");
         screensButton.setBackground(new Color(0x1c1b30));
@@ -123,7 +116,7 @@ public class AdminView extends JFrame implements ActionListener {
         screensButton.setFont(new Font("Verdana", Font.BOLD, 14));
         screensButton.addActionListener(this);
         leftPanel.add(screensButton);
-        screensButton.setBounds(15, 295, 150, 30);
+        screensButton.setBounds(15, 225, 150, 30);
 
         //---- reservationButton ----
         reservationButton.setText("Reservations");
@@ -132,54 +125,52 @@ public class AdminView extends JFrame implements ActionListener {
         reservationButton.setFont(new Font("Verdana", Font.BOLD, 14));
         reservationButton.addActionListener(this);
         leftPanel.add(reservationButton);
-        reservationButton.setBounds(15, 330, 150, 30);
+        reservationButton.setBounds(15, 260, 150, 30);
 
         //---- paymentsButton ----
         paymentsButton.setText("Payments");
         paymentsButton.setBackground(new Color(0x1c1b30));
         paymentsButton.setForeground(Color.white);
         paymentsButton.setFont(new Font("Verdana", Font.BOLD, 14));
+        paymentsButton.addActionListener(this);
         leftPanel.add(paymentsButton);
-        paymentsButton.setBounds(15, 365, 150, 30);
+        paymentsButton.setBounds(15, 295, 150, 30);
+
+                //---- reviewsButton ----
+        reviewsButton.setText("Reviews");
+        reviewsButton.setBackground(new Color(0x1c1b30));
+        reviewsButton.setForeground(Color.white);
+        reviewsButton.setFont(new Font("Verdana", Font.BOLD, 14));
+        reviewsButton.addActionListener(this);
+        leftPanel.add(reviewsButton);
+        reviewsButton.setBounds(15, 330, 150, 30);
 
         //---- usersButton ----
         usersButton.setText("Users");
         usersButton.setBackground(new Color(0x1c1b30));
         usersButton.setForeground(Color.white);
         usersButton.setFont(new Font("Verdana", Font.BOLD, 14));
+        usersButton.addActionListener(this);
         leftPanel.add(usersButton);
-        usersButton.setBounds(15, 435, 150, 30);
-
-        //---- label1 ----
-        ImageIcon ppImage = new ImageIcon(getClass().getResource("../assets/img/dashboard/profile.png"));
-        label1.setIcon(ppImage);
-        label1.setForeground(Color.white);
-        leftPanel.add(label1);
-        label1.setBounds(40, 495, 30, 20);
+        usersButton.setBounds(15, 365, 150, 30);
 
         //---- profileLink ----
-        profileLink.setText("    Profile");
+        profileLink.setText("Profile");
         profileLink.setBackground(new Color(0x1c1b30));
         profileLink.setForeground(Color.white);
         profileLink.setFont(new Font("Verdana", Font.BOLD, 14));
+        profileLink.addActionListener(this);
         leftPanel.add(profileLink);
-        profileLink.setBounds(15, 490, 150, 30);
+        profileLink.setBounds(15, 400, 150, 30);
 
         //---- logoutButton ----
         logoutButton.setText("Logout");
         logoutButton.setBackground(new Color(0x666666));
         logoutButton.setForeground(Color.white);
         logoutButton.setFont(new Font("Verdana", Font.BOLD, 14));
+        logoutButton.addActionListener(this);
         leftPanel.add(logoutButton);
-        logoutButton.setBounds(15, 530, 150, 30);
-
-        //---- reviewsButton ----
-        reviewsButton.setText("Reviews");
-        reviewsButton.setBackground(new Color(0x1c1b30));
-        reviewsButton.setForeground(Color.white);
-        reviewsButton.setFont(new Font("Verdana", Font.BOLD, 14));
-        leftPanel.add(reviewsButton);
-        reviewsButton.setBounds(15, 400, 150, 30);
+        logoutButton.setBounds(15, 435, 150, 30);
 
         contentPane.add(leftPanel);
         leftPanel.setBounds(0, 0, 180, 570);
@@ -189,6 +180,13 @@ public class AdminView extends JFrame implements ActionListener {
 
         rightPanelContainer.add(adminDashboardPanel, "dashboard");
         rightPanelContainer.add(adminMoviePanel, "movies");
+        rightPanelContainer.add(adminGenrePanel, "genres");
+        rightPanelContainer.add(adminScreeningPanel, "screenings");
+        rightPanelContainer.add(adminReservationPanel, "reservations");
+        rightPanelContainer.add(adminPaymentPanel, "payments");
+        rightPanelContainer.add(adminReviewPanel, "reviews");
+        rightPanelContainer.add(adminUserListPanel, "users");
+        rightPanelContainer.add(adminProfilePanel, "profile");
 
         cardLayout.show(rightPanelContainer, "dashboard");
 
@@ -206,6 +204,27 @@ public class AdminView extends JFrame implements ActionListener {
                 break;
             case "Movies":
                 cardLayout.show(rightPanelContainer, "movies");
+                break;
+            case "Genres":
+                cardLayout.show(rightPanelContainer, "genres");
+                break;
+            case "Screens":
+                cardLayout.show(rightPanelContainer, "screenings");
+                break;
+            case "Reservations":
+                cardLayout.show(rightPanelContainer, "reservations");
+                break;
+            case "Payments":
+                cardLayout.show(rightPanelContainer, "payments");
+                break;
+            case "Reviews":
+                cardLayout.show(rightPanelContainer, "reviews");
+                break;
+            case "Users":
+                cardLayout.show(rightPanelContainer, "users");
+                break;
+            case "Profile":
+                cardLayout.show(rightPanelContainer, "profile");
                 break;
         }
 	}
