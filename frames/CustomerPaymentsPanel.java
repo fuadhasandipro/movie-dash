@@ -2,8 +2,6 @@ package frames;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.time.format.DateTimeFormatter;
 import entities.*;
 import repositories.*;
 
@@ -22,7 +20,7 @@ public class CustomerPaymentsPanel extends JPanel {
         setLayout(null);
 
         JLabel headerTitle = new JLabel();
-        headerTitle.setText("Payments of " + currentUser.getName());
+        headerTitle.setText("Payments by " + currentUser.getName());
         headerTitle.setForeground(new Color(0xb8b3fc));
         headerTitle.setFont(new Font("Verdana", Font.PLAIN, 16));
         add(headerTitle);
@@ -32,7 +30,6 @@ public class CustomerPaymentsPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(paymentPanel);
         scrollPane.setBounds(30, 105, 660, 325);
         add(scrollPane);
-
     }
 
     private JPanel createPaymentPanel() {
@@ -40,9 +37,9 @@ public class CustomerPaymentsPanel extends JPanel {
         panel.setBackground(new Color(0x3a3854));
         panel.setLayout(null);
 
-        Payment[] payments = paymentRepo.getPaymentsByReservationId(currentUser.getUserId());
-
-        if (payments.length == 0) {
+        Reservation[] reservations = reservationRepo.getReservationsByCustomerId(currentUser.getUserId());
+        
+        if (reservations.length == 0) {
             JLabel noPaymentLabel = new JLabel("No payments found.");
             noPaymentLabel.setForeground(Color.WHITE);
             noPaymentLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -50,13 +47,18 @@ public class CustomerPaymentsPanel extends JPanel {
             panel.add(noPaymentLabel);
         } else {
             int yOffset = 10;
-            for (Payment payment : payments) {
-                if (payment != null) {
-                    Reservation reservation = reservationRepo.searchReservationById(payment.getReservationId());
-                    JPanel paymentCard = createPaymentCard(payment, reservation);
-                    paymentCard.setBounds(10, yOffset, 640, 100);
-                    panel.add(paymentCard);
-                    yOffset += 110;
+            for (Reservation reservation : reservations) {
+                if (reservation != null) {
+
+                    Payment[] payments = paymentRepo.getPaymentsByReservationId(reservation.getReservationId());
+                    for (Payment payment : payments) {
+                        if(payment != null) {
+                            JPanel paymentCard = createPaymentCard(payment, reservation);
+                            paymentCard.setBounds(10, yOffset, 640, 100);
+                            panel.add(paymentCard);
+                            yOffset += 110;
+                        }
+                    }
                 }
             }
             panel.setPreferredSize(new Dimension(660, yOffset));
@@ -69,17 +71,17 @@ public class CustomerPaymentsPanel extends JPanel {
         card.setLayout(null);
         card.setBackground(new Color(0x2e2d3d));
 
-        JLabel reservationLabel = new JLabel("Reservation ID: " + payment.getReservationId());
+        JLabel reservationLabel = new JLabel("Reservation ID: " + reservation.getReservationId());
         reservationLabel.setForeground(Color.WHITE);
         reservationLabel.setBounds(10, 10, 300, 20);
         card.add(reservationLabel);
 
         JLabel amountLabel = new JLabel("Amount: $" + payment.getAmount());
         amountLabel.setForeground(Color.WHITE);
-        amountLabel.setBounds(10, 40, 200, 20);
+        amountLabel.setBounds(10, 40, 100, 20);
         card.add(amountLabel);
 
-        JLabel paymentDateLabel = new JLabel("Payment Date: " + payment.getPaymentDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        JLabel paymentDateLabel = new JLabel("Date: " + payment.getPaymentDate());
         paymentDateLabel.setForeground(Color.WHITE);
         paymentDateLabel.setBounds(10, 70, 200, 20);
         card.add(paymentDateLabel);

@@ -39,7 +39,6 @@ public class CustomerReservationPanel extends JPanel {
 
         JButton bookButton = new JButton("Book New Reservation");
         bookButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 BookingStepsDialog bookingDialog = new BookingStepsDialog(parentFrame, currentUser);
                 bookingDialog.setVisible(true);

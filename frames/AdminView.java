@@ -19,6 +19,7 @@ public class AdminView extends JFrame implements ActionListener {
 	private JButton usersButton;
 	private JButton profileLink;
 	private JButton logoutButton;
+	private JButton meetDevButton;
 	private JButton reviewsButton;
 	private JPanel rightPanelContainer;
     private CardLayout cardLayout;
@@ -32,6 +33,7 @@ public class AdminView extends JFrame implements ActionListener {
     private UserListPanel adminUserListPanel;
     private CustomerProfilePanel adminProfilePanel;
     private User currentUser;
+    private CreditsPage meetTheDev;
 
     public AdminView(User currentUser) {
         super("Admin Dashboard");
@@ -51,6 +53,7 @@ public class AdminView extends JFrame implements ActionListener {
 		usersButton = new JButton();
 		profileLink = new JButton();
 		logoutButton = new JButton();
+		meetDevButton = new JButton();
 		reviewsButton = new JButton();
         rightPanelContainer = new JPanel();
         cardLayout = new CardLayout();
@@ -63,6 +66,7 @@ public class AdminView extends JFrame implements ActionListener {
         adminReviewPanel = new ReviewPanel();
         adminUserListPanel = new UserListPanel();
         adminProfilePanel = new CustomerProfilePanel(this.currentUser);
+        meetTheDev = new CreditsPage();
         
         rightPanelContainer.setLayout(cardLayout);
 
@@ -160,6 +164,14 @@ public class AdminView extends JFrame implements ActionListener {
         leftPanel.add(logoutButton);
         logoutButton.setBounds(15, 435, 150, 30);
 
+        meetDevButton.setText("Developer");
+        meetDevButton.setBackground(new Color(0x666666));
+        meetDevButton.setForeground(Color.white);
+        meetDevButton.setFont(new Font("Verdana", Font.BOLD, 14));
+        meetDevButton.addActionListener(this);
+        leftPanel.add(meetDevButton);
+        meetDevButton.setBounds(15, 470, 150, 30);
+
         contentPane.add(leftPanel);
         leftPanel.setBounds(0, 0, 180, 570);
 
@@ -175,6 +187,7 @@ public class AdminView extends JFrame implements ActionListener {
         rightPanelContainer.add(adminReviewPanel, "reviews");
         rightPanelContainer.add(adminUserListPanel, "users");
         rightPanelContainer.add(adminProfilePanel, "profile");
+        rightPanelContainer.add(meetTheDev, "meet");
 
         cardLayout.show(rightPanelContainer, "dashboard");
 
@@ -213,6 +226,9 @@ public class AdminView extends JFrame implements ActionListener {
                 break;
             case "Profile":
                 cardLayout.show(rightPanelContainer, "profile");
+                break;
+            case "Developer":
+                cardLayout.show(rightPanelContainer, "meet");
                 break;
             case "Logout": 
                 this.setVisible(false);

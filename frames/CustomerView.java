@@ -22,6 +22,7 @@ public class CustomerView extends JFrame implements ActionListener {
 	private JLabel label1;
 	private JButton profileLink;
 	private JButton logoutButton;
+    private JButton meetDevButton;
 	private JButton reloadButton;
 	private JButton reviewsButton;
 	private JPanel rightPanelContainer;
@@ -31,6 +32,7 @@ public class CustomerView extends JFrame implements ActionListener {
     private CustomerProfilePanel customerProfilePanel;
     private CustomerRatingsPanel customerRatingsPanel;
     private CustomerPaymentsPanel customerPaymentsPanel;
+    private CreditsPage meetTheDev;
 
     public CustomerView(User currentUser) {
         super("Customer Dashboard");
@@ -54,6 +56,7 @@ public class CustomerView extends JFrame implements ActionListener {
 		label1 = new JLabel();
 		profileLink = new JButton();
 		logoutButton = new JButton();
+		meetDevButton = new JButton();
 		reloadButton = new JButton();
 		reviewsButton = new JButton();
         rightPanelContainer = new JPanel();
@@ -63,6 +66,7 @@ public class CustomerView extends JFrame implements ActionListener {
         customerProfilePanel = new CustomerProfilePanel(this.currentUser);
         customerRatingsPanel = new CustomerRatingsPanel(this.currentUser);
         customerPaymentsPanel = new CustomerPaymentsPanel(this.currentUser);
+        meetTheDev = new CreditsPage();
         
         rightPanelContainer.setLayout(cardLayout);
 
@@ -92,7 +96,7 @@ public class CustomerView extends JFrame implements ActionListener {
         moviesButton.setBounds(15, 120, 150, 30);
 
         //---- reservationButton ----
-        reservationButton.setText("Your Reservations");
+        reservationButton.setText("Reservations");
         reservationButton.setBackground(new Color(0x1c1b30));
         reservationButton.setForeground(Color.white);
         reservationButton.setFont(new Font("Verdana", Font.BOLD, 14));
@@ -101,7 +105,7 @@ public class CustomerView extends JFrame implements ActionListener {
         reservationButton.setBounds(15, 155, 150, 30);
 
         //---- payments ----
-        genresButton.setText("Your Payments");
+        genresButton.setText("Payments");
         genresButton.setBackground(new Color(0x1c1b30));
         genresButton.setForeground(Color.white);
         genresButton.setFont(new Font("Verdana", Font.BOLD, 14));
@@ -148,8 +152,17 @@ public class CustomerView extends JFrame implements ActionListener {
         logoutButton.setBackground(new Color(0x666666));
         logoutButton.setForeground(Color.white);
         logoutButton.setFont(new Font("Verdana", Font.BOLD, 14));
+        logoutButton.addActionListener(this);
         leftPanel.add(logoutButton);
         logoutButton.setBounds(15, 330, 150, 30);
+
+        meetDevButton.setText("Developer");
+        meetDevButton.setBackground(new Color(0x666666));
+        meetDevButton.setForeground(Color.white);
+        meetDevButton.setFont(new Font("Verdana", Font.BOLD, 14));
+        meetDevButton.addActionListener(this);
+        leftPanel.add(meetDevButton);
+        meetDevButton.setBounds(15, 365, 150, 30);
 
         contentPane.add(leftPanel);
         leftPanel.setBounds(0, 0, 180, 570);
@@ -162,6 +175,7 @@ public class CustomerView extends JFrame implements ActionListener {
         rightPanelContainer.add(customerProfilePanel, "profile");
         rightPanelContainer.add(customerRatingsPanel, "reviews");
         rightPanelContainer.add(customerPaymentsPanel, "payments");
+        rightPanelContainer.add(meetTheDev, "meet");
 
         cardLayout.show(rightPanelContainer, "movies");
 
@@ -177,7 +191,7 @@ public class CustomerView extends JFrame implements ActionListener {
             case "All Movies":
                 cardLayout.show(rightPanelContainer, "movies");
                 break;
-            case "Your Reservations":
+            case "Reservations":
                 cardLayout.show(rightPanelContainer, "reservations");
                 break;
             case "    Profile":
@@ -187,8 +201,12 @@ public class CustomerView extends JFrame implements ActionListener {
                 cardLayout.show(rightPanelContainer, "reviews");
                 break;
                 
-            case "Your Payments":
+            case "Payments":
                 cardLayout.show(rightPanelContainer, "payments");
+                break;
+
+            case "Developer":
+                cardLayout.show(rightPanelContainer, "meet");
                 break;
 
             case "Reload Data":
@@ -199,12 +217,16 @@ public class CustomerView extends JFrame implements ActionListener {
                 customerReservationPanel = new CustomerReservationPanel(this.currentUser, this);
                 customerProfilePanel = new CustomerProfilePanel(this.currentUser);
                 customerRatingsPanel = new CustomerRatingsPanel(this.currentUser);
+                customerPaymentsPanel = new CustomerPaymentsPanel(this.currentUser);
+                meetTheDev = new CreditsPage();
 
                 rightPanelContainer.removeAll();
                 rightPanelContainer.add(customerMoviesPanel, "movies");
                 rightPanelContainer.add(customerReservationPanel, "reservations");
                 rightPanelContainer.add(customerProfilePanel, "profile");
                 rightPanelContainer.add(customerRatingsPanel, "reviews");
+                rightPanelContainer.add(customerPaymentsPanel, "payments");
+                rightPanelContainer.add(meetTheDev, "meet");
 
                 cardLayout.show(rightPanelContainer, "movies");
 

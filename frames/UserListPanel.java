@@ -9,9 +9,6 @@ import repositories.*;
 
 public class UserListPanel extends JPanel implements ActionListener {
 
-    // private JTextField searchField;
-    // private JLabel searchLabel;
-    // private JButton searchButton;
     private JLabel headerTitle;
     private JTable userTable;
     private JScrollPane userTableSP;

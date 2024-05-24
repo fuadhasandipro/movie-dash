@@ -80,7 +80,6 @@ public class CustomerMoviesPanel extends JPanel {
         add(reserveButton);
         reserveButton.setBounds(30, 70, 150, 25);
         reserveButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 BookingStepsDialog bookingDialog = new BookingStepsDialog(parentFrame, currentUser);
                 bookingDialog.setVisible(true);
@@ -135,7 +134,6 @@ public class CustomerMoviesPanel extends JPanel {
         reviewButton.setActionCommand(movie.getMovieId());
 
         reviewButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 String movieId = e.getActionCommand();
                 showReviewDialog(movieId);
@@ -167,7 +165,6 @@ public class CustomerMoviesPanel extends JPanel {
         buttonPanel = new JPanel();
         submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 ReviewRepo newRp = new ReviewRepo();
                 Review existingReview = newRp.hasUserReviewedMovie(movieId, currentUser.getUserId());

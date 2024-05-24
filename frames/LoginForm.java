@@ -104,7 +104,7 @@ public class LoginForm extends JFrame implements ActionListener {
         noAccountLabel.setFont(new Font("Rubik Light", Font.PLAIN, 14));
         noAccountLabel.setForeground(Color.white);
         mainPanel.add(noAccountLabel);
-        noAccountLabel.setBounds(405, 365, 145, 30);
+        noAccountLabel.setBounds(405, 365, 165, 30);
 
         //---- forgotPasswordButton ----
         forgotPasswordButton.setText("Forgot Password");
@@ -121,7 +121,7 @@ public class LoginForm extends JFrame implements ActionListener {
         createAccountButton.setFont(new Font("Rubik Light", Font.BOLD, 12));
         createAccountButton.addActionListener(this);
         mainPanel.add(createAccountButton);
-        createAccountButton.setBounds(545, 370, 105, 20);
+        createAccountButton.setBounds(565, 370, 105, 20);
         
         add(mainPanel);
     }
